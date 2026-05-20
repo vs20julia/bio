@@ -1,0 +1,1189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Juliana James — Systems Builder · Operations · Policy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+/* ═══════════════════════════════════════════
+   TOKENS
+═══════════════════════════════════════════ */
+:root {
+  --navy:    #0F2744;
+  --navy2:   #1A3C5E;
+  --gold:    #C8973A;
+  --gold2:   #E8B85A;
+  --cream:   #FAF7F2;
+  --paper:   #F2EDE4;
+  --charcoal:#1A1A2E;
+  --mid:     #5A5A78;
+  --pale:    #EAE6F0;
+  --white:   #FFFFFF;
+  --font-display: 'Playfair Display', serif;
+  --font-body:    'DM Sans', sans-serif;
+  --font-mono:    'DM Mono', monospace;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-body);
+  background: var(--cream);
+  color: var(--charcoal);
+  overflow-x: hidden;
+}
+
+/* ═══════════════════════════════════════════
+   SKIP LINK (accessibility)
+═══════════════════════════════════════════ */
+.skip-link {
+  position: absolute;
+  top: -100px;
+  left: 16px;
+  background: var(--gold);
+  color: var(--navy);
+  padding: 8px 16px;
+  font-weight: 600;
+  border-radius: 4px;
+  z-index: 9999;
+  transition: top .2s;
+}
+.skip-link:focus { top: 16px; }
+
+/* ═══════════════════════════════════════════
+   NAV
+═══════════════════════════════════════════ */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  background: rgba(15, 39, 68, 0.96);
+  backdrop-filter: blur(12px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 clamp(16px, 5vw, 48px);
+  height: 60px;
+}
+.nav-logo {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  color: var(--gold);
+  letter-spacing: .03em;
+  text-decoration: none;
+}
+.nav-links {
+  display: flex;
+  gap: clamp(12px, 3vw, 32px);
+  list-style: none;
+}
+.nav-links a {
+  color: rgba(255,255,255,.75);
+  text-decoration: none;
+  font-size: .82rem;
+  font-weight: 500;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  transition: color .2s;
+}
+.nav-links a:hover { color: var(--gold2); }
+
+/* hamburger (mobile) */
+.hamburger { display: none; background: none; border: none; cursor: pointer; padding: 4px; }
+.hamburger span {
+  display: block; width: 22px; height: 2px;
+  background: var(--gold); margin: 5px 0;
+  transition: transform .3s, opacity .3s;
+}
+.nav-drawer {
+  display: none;
+  position: fixed;
+  top: 60px; right: 0;
+  width: 200px;
+  background: var(--navy);
+  padding: 16px 0;
+  box-shadow: -4px 4px 20px rgba(0,0,0,.3);
+}
+.nav-drawer.open { display: block; }
+.nav-drawer a {
+  display: block;
+  padding: 12px 24px;
+  color: rgba(255,255,255,.8);
+  text-decoration: none;
+  font-size: .9rem;
+  font-weight: 500;
+  border-bottom: 1px solid rgba(255,255,255,.06);
+  transition: background .2s;
+}
+.nav-drawer a:hover { background: rgba(200,151,58,.15); color: var(--gold2); }
+
+@media(max-width: 640px) {
+  .nav-links { display: none; }
+  .hamburger { display: block; }
+}
+
+/* ═══════════════════════════════════════════
+   HERO
+═══════════════════════════════════════════ */
+#hero {
+  min-height: 100svh;
+  background: var(--navy);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  position: relative;
+  overflow: hidden;
+  padding-top: 60px;
+}
+
+/* geometric bg accent */
+#hero::before {
+  content: '';
+  position: absolute;
+  top: -80px; right: -80px;
+  width: 500px; height: 500px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(200,151,58,.18) 0%, transparent 70%);
+  pointer-events: none;
+}
+#hero::after {
+  content: '';
+  position: absolute;
+  bottom: -100px; left: -60px;
+  width: 400px; height: 400px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(26,60,94,.6) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.hero-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: clamp(40px, 8vw, 80px) clamp(24px, 6vw, 72px);
+  z-index: 2;
+  animation: fadeUp .9s ease both;
+}
+
+.hero-eyebrow {
+  font-family: var(--font-mono);
+  font-size: .75rem;
+  letter-spacing: .2em;
+  color: var(--gold);
+  text-transform: uppercase;
+  margin-bottom: 16px;
+  opacity: 0;
+  animation: fadeUp .8s .2s ease forwards;
+}
+
+.hero-name {
+  font-family: var(--font-display);
+  font-size: clamp(2.6rem, 6vw, 5rem);
+  font-weight: 900;
+  color: var(--white);
+  line-height: 1.05;
+  margin-bottom: 20px;
+  opacity: 0;
+  animation: fadeUp .8s .35s ease forwards;
+}
+.hero-name em { color: var(--gold); font-style: normal; }
+
+.hero-tagline {
+  font-size: clamp(.95rem, 1.8vw, 1.1rem);
+  color: rgba(255,255,255,.72);
+  line-height: 1.7;
+  max-width: 480px;
+  margin-bottom: 32px;
+  opacity: 0;
+  animation: fadeUp .8s .5s ease forwards;
+}
+
+.hero-opportunity {
+  background: rgba(200,151,58,.12);
+  border-left: 3px solid var(--gold);
+  border-radius: 0 8px 8px 0;
+  padding: 16px 20px;
+  margin-bottom: 32px;
+  max-width: 480px;
+  opacity: 0;
+  animation: fadeUp .8s .65s ease forwards;
+}
+.hero-opportunity .label {
+  font-family: var(--font-mono);
+  font-size: .65rem;
+  letter-spacing: .18em;
+  color: var(--gold2);
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.hero-opportunity p {
+  font-size: .92rem;
+  color: rgba(255,255,255,.85);
+  line-height: 1.6;
+}
+
+.hero-cta {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  opacity: 0;
+  animation: fadeUp .8s .8s ease forwards;
+}
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  border-radius: 6px;
+  font-family: var(--font-body);
+  font-size: .88rem;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  border: none;
+  transition: transform .2s, box-shadow .2s, background .2s;
+}
+.btn:hover { transform: translateY(-2px); }
+.btn-primary {
+  background: var(--gold);
+  color: var(--navy);
+}
+.btn-primary:hover { background: var(--gold2); box-shadow: 0 8px 24px rgba(200,151,58,.35); }
+.btn-outline {
+  background: transparent;
+  color: rgba(255,255,255,.85);
+  border: 1.5px solid rgba(255,255,255,.3);
+}
+.btn-outline:hover { border-color: var(--gold); color: var(--gold); }
+
+/* Hero right — aspirations panel */
+.hero-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: clamp(40px, 8vw, 80px) clamp(24px, 5vw, 60px);
+  z-index: 2;
+  border-left: 1px solid rgba(255,255,255,.08);
+  opacity: 0;
+  animation: fadeIn 1s .9s ease forwards;
+}
+
+.panel-title {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  color: var(--gold);
+  font-style: italic;
+  margin-bottom: 24px;
+  letter-spacing: .02em;
+}
+
+.aspiration-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.aspiration-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 16px;
+  border-radius: 8px;
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.06);
+  transition: background .2s, border-color .2s;
+}
+.aspiration-item:hover {
+  background: rgba(200,151,58,.08);
+  border-color: rgba(200,151,58,.25);
+}
+.aspiration-icon { font-size: 1.2rem; flex-shrink: 0; line-height: 1.4; }
+.aspiration-text {
+  font-size: .88rem;
+  color: rgba(255,255,255,.78);
+  line-height: 1.5;
+}
+.aspiration-text strong { color: rgba(255,255,255,.95); font-weight: 600; }
+
+/* Role tags */
+.role-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 24px;
+}
+.role-tag {
+  padding: 5px 12px;
+  background: rgba(200,151,58,.15);
+  border: 1px solid rgba(200,151,58,.3);
+  border-radius: 100px;
+  font-family: var(--font-mono);
+  font-size: .7rem;
+  color: var(--gold2);
+  letter-spacing: .05em;
+  white-space: nowrap;
+}
+
+@media(max-width: 768px) {
+  #hero { grid-template-columns: 1fr; }
+  .hero-panel {
+    border-left: none;
+    border-top: 1px solid rgba(255,255,255,.08);
+    padding-top: 32px;
+  }
+}
+
+/* ═══════════════════════════════════════════
+   SECTIONS COMMON
+═══════════════════════════════════════════ */
+section { padding: clamp(48px, 8vw, 96px) clamp(20px, 8vw, 10%) }
+.section-label {
+  font-family: var(--font-mono);
+  font-size: .7rem;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 8px;
+}
+.section-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+  font-weight: 700;
+  color: var(--navy);
+  margin-bottom: 40px;
+  line-height: 1.2;
+}
+.section-title span { color: var(--gold); }
+
+/* ═══════════════════════════════════════════
+   ABOUT / SKILLS
+═══════════════════════════════════════════ */
+#about { background: var(--white); }
+
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  align-items: start;
+}
+
+.bio-block p {
+  font-size: 1rem;
+  color: var(--mid);
+  line-height: 1.8;
+  margin-bottom: 16px;
+}
+.bio-block p strong { color: var(--navy); }
+
+.stat-row {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+  margin-top: 24px;
+}
+.stat {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.stat-num {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 900;
+  color: var(--navy);
+  line-height: 1;
+}
+.stat-label {
+  font-size: .72rem;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  color: var(--mid);
+}
+
+/* Skills grid */
+.skills-block .skill-group { margin-bottom: 24px; }
+.skill-group-title {
+  font-family: var(--font-mono);
+  font-size: .7rem;
+  letter-spacing: .15em;
+  text-transform: uppercase;
+  color: var(--mid);
+  margin-bottom: 10px;
+}
+.skill-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.skill-tag {
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-size: .8rem;
+  font-weight: 500;
+  background: var(--paper);
+  color: var(--navy2);
+  border: 1px solid rgba(26,60,94,.15);
+  transition: background .2s, color .2s;
+  cursor: default;
+}
+.skill-tag:hover {
+  background: var(--navy2);
+  color: var(--white);
+}
+
+@media(max-width: 768px) {
+  .about-grid { grid-template-columns: 1fr; }
+}
+
+/* ═══════════════════════════════════════════
+   EXPERIENCE
+═══════════════════════════════════════════ */
+#experience { background: var(--cream); }
+
+.exp-timeline {
+  position: relative;
+  padding-left: 32px;
+}
+.exp-timeline::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 8px;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(to bottom, var(--gold), transparent);
+}
+
+.exp-item {
+  position: relative;
+  margin-bottom: 40px;
+  padding: 24px 28px;
+  background: var(--white);
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(15,39,68,.06);
+  border-left: 3px solid transparent;
+  transition: border-color .2s, box-shadow .2s, transform .2s;
+}
+.exp-item:hover {
+  border-color: var(--gold);
+  box-shadow: 0 6px 24px rgba(15,39,68,.1);
+  transform: translateX(4px);
+}
+.exp-item::before {
+  content: '';
+  position: absolute;
+  left: -39px;
+  top: 28px;
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  background: var(--gold);
+  border: 3px solid var(--cream);
+  box-shadow: 0 0 0 2px var(--gold);
+}
+.exp-item.featured { border-color: var(--gold); background: #FFFBF4; }
+
+.exp-meta {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+.exp-role {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--navy);
+}
+.exp-org { font-size: .85rem; color: var(--gold); font-weight: 600; margin-top: 2px; }
+.exp-dates {
+  font-family: var(--font-mono);
+  font-size: .72rem;
+  color: var(--mid);
+  white-space: nowrap;
+  padding: 3px 10px;
+  background: var(--paper);
+  border-radius: 4px;
+}
+.exp-desc {
+  font-size: .88rem;
+  color: var(--mid);
+  line-height: 1.7;
+}
+.exp-desc li {
+  margin-bottom: 4px;
+  padding-left: 4px;
+  list-style: none;
+}
+.exp-desc li::before { content: "▸  "; color: var(--gold); font-size: .75rem; }
+
+/* ═══════════════════════════════════════════
+   RECENT WORK / PRODUCTS
+═══════════════════════════════════════════ */
+#work { background: var(--navy); }
+#work .section-title { color: var(--white); }
+#work .section-label { color: var(--gold2); }
+
+.work-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 20px;
+}
+.work-card {
+  background: rgba(255,255,255,.05);
+  border: 1px solid rgba(255,255,255,.09);
+  border-radius: 12px;
+  padding: 24px;
+  transition: background .2s, transform .2s, border-color .2s;
+  cursor: default;
+}
+.work-card:hover {
+  background: rgba(200,151,58,.1);
+  border-color: rgba(200,151,58,.3);
+  transform: translateY(-4px);
+}
+.work-card-icon { font-size: 1.8rem; margin-bottom: 12px; }
+.work-card-title {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--white);
+  margin-bottom: 8px;
+}
+.work-card-desc {
+  font-size: .83rem;
+  color: rgba(255,255,255,.6);
+  line-height: 1.65;
+}
+.work-card-tag {
+  display: inline-block;
+  margin-top: 12px;
+  padding: 3px 10px;
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: .65rem;
+  background: rgba(200,151,58,.2);
+  color: var(--gold2);
+}
+
+/* ═══════════════════════════════════════════
+   VALUES & IMPACT
+═══════════════════════════════════════════ */
+#values { background: var(--paper); }
+
+.two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+}
+@media(max-width: 680px) {
+  .two-col { grid-template-columns: 1fr; }
+}
+
+.value-list, .impact-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.value-item, .impact-item {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  padding: 14px 16px;
+  border-radius: 8px;
+  background: var(--white);
+  border-left: 3px solid var(--gold);
+  transition: transform .2s;
+}
+.value-item:hover, .impact-item:hover { transform: translateX(4px); }
+.value-num {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  font-weight: 900;
+  color: rgba(200,151,58,.3);
+  line-height: 1;
+  min-width: 28px;
+}
+.value-text strong, .impact-text strong {
+  display: block;
+  font-size: .88rem;
+  font-weight: 600;
+  color: var(--navy);
+  margin-bottom: 2px;
+}
+.value-text span, .impact-text span {
+  font-size: .8rem;
+  color: var(--mid);
+  line-height: 1.5;
+}
+
+/* ═══════════════════════════════════════════
+   CONTACT
+═══════════════════════════════════════════ */
+#contact { background: var(--white); }
+
+.contact-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  align-items: start;
+}
+@media(max-width: 680px) {
+  .contact-grid { grid-template-columns: 1fr; }
+}
+
+.contact-card {
+  background: var(--cream);
+  border-radius: 12px;
+  padding: 32px;
+}
+.contact-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 0;
+  border-bottom: 1px solid rgba(0,0,0,.06);
+}
+.contact-item:last-child { border-bottom: none; }
+.contact-icon { font-size: 1.3rem; width: 36px; text-align: center; }
+.contact-detail { display: flex; flex-direction: column; }
+.contact-label { font-size: .68rem; text-transform: uppercase; letter-spacing: .12em; color: var(--mid); margin-bottom: 2px; }
+.contact-value { font-size: .92rem; font-weight: 500; color: var(--navy); }
+.contact-value a { color: var(--navy2); text-decoration: none; }
+.contact-value a:hover { color: var(--gold); }
+
+.cv-cta {
+  background: var(--navy);
+  border-radius: 12px;
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.cv-cta p {
+  font-size: .95rem;
+  color: rgba(255,255,255,.75);
+  line-height: 1.7;
+}
+.cv-cta .section-title { margin-bottom: 12px; }
+
+/* ═══════════════════════════════════════════
+   FOOTER
+═══════════════════════════════════════════ */
+footer {
+  background: var(--navy);
+  padding: 24px clamp(20px, 8vw, 10%);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  border-top: 1px solid rgba(255,255,255,.08);
+}
+footer p { font-size: .78rem; color: rgba(255,255,255,.4); }
+footer a { color: var(--gold); text-decoration: none; font-size: .78rem; }
+
+/* ═══════════════════════════════════════════
+   ANIMATIONS
+═══════════════════════════════════════════ */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* Scroll reveal */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity .65s ease, transform .65s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* Focus styles */
+a:focus-visible, button:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+</style>
+</head>
+<body>
+
+<a href="#hero" class="skip-link">Skip to main content</a>
+
+<!-- NAV -->
+<nav role="navigation" aria-label="Main navigation">
+  <a href="#hero" class="nav-logo">Juliana James</a>
+  <ul class="nav-links">
+    <li><a href="#work">Recent Work</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#values">Values</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <button class="hamburger" aria-label="Open menu" id="hamburger">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div class="nav-drawer" id="drawer">
+  <a href="#work" class="drawer-link">Recent Work</a>
+  <a href="#experience" class="drawer-link">Experience</a>
+  <a href="#about" class="drawer-link">About</a>
+  <a href="#values" class="drawer-link">Values</a>
+  <a href="#contact" class="drawer-link">Contact</a>
+</div>
+
+<!-- ═══════════════ HERO ═══════════════ -->
+<section id="hero" aria-label="Introduction">
+  <div class="hero-text">
+    <p class="hero-eyebrow">Abuja, Nigeria</p>
+    <h1 class="hero-name">Juliana<br/><em>James</em></h1>
+    <p class="hero-tagline">
+      I build the systems that keep organisations moving — from operations and stakeholder communications to sales infrastructure and program delivery.
+    </p>
+
+    <div class="hero-opportunity">
+      <div class="label">Why Hire Me</div>
+      <p>
+        6+ years across private, public, and civil society sectors. Founder of a growing business systems consultancy. A 4.52 CGPA in Public Policy. A pipeline of 10+ market-ready digital products. I bring a rare combination of systems thinking, executive presence, and ground-level execution — and I'm ready to deploy it for you.
+      </p>
+    </div>
+
+    <div class="hero-cta">
+      <a href="https://drive.google.com/file/d/1SsTf8tRRB2OWALxafrkqNrMDDayMq1CG/view" class="btn btn-primary" target="_blank" rel="noopener">View My CV</a>
+      <a href="#experience" class="btn btn-outline">My Experience</a>
+    </div>
+  </div>
+
+  <div class="hero-panel" aria-label="Goals and aspirations">
+    <p class="panel-title">What I'm building toward —</p>
+    <ul class="aspiration-list">
+      <li class="aspiration-item">
+        <span class="aspiration-icon">⚙️</span>
+        <p class="aspiration-text"><strong>Operations Management</strong> — designing teams and systems that scale without chaos</p>
+      </li>
+      <li class="aspiration-item">
+        <span class="aspiration-icon">🤝</span>
+        <p class="aspiration-text"><strong>Stakeholder Communications</strong> — bridging institutions, founders, and communities</p>
+      </li>
+      <li class="aspiration-item">
+        <span class="aspiration-icon">📈</span>
+        <p class="aspiration-text"><strong>Sales & Marketing Leadership</strong> — turning outreach into long-term revenue relationships</p>
+      </li>
+      <li class="aspiration-item">
+        <span class="aspiration-icon">🔬</span>
+        <p class="aspiration-text"><strong>Research & Development</strong> — evidence-based strategy for African institutions and SMEs</p>
+      </li>
+      <li class="aspiration-item">
+        <span class="aspiration-icon">🗂️</span>
+        <p class="aspiration-text"><strong>Program / Project Management</strong> — owning complex deliverables from brief to impact</p>
+      </li>
+    </ul>
+    <div class="role-tags">
+      <span class="role-tag">Open to Full-time</span>
+      <span class="role-tag">Contract</span>
+      <span class="role-tag">Remote-friendly</span>
+      <span class="role-tag">Abuja-based</span>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ RECENT WORK ═══════════════ -->
+<section id="work" aria-labelledby="work-title">
+  <p class="section-label">What I've Built</p>
+  <h2 class="section-title" id="work-title">Recent Work & <span>Digital Products</span></h2>
+  <div class="work-grid reveal">
+
+    <div class="work-card">
+      <div class="work-card-icon">🏗️</div>
+      <h3 class="work-card-title">MIMS Local Visibility Deployment (LVD)</h3>
+      <p class="work-card-desc">WhatsApp-first client acquisition & retention framework for Nigerian SMBs across 4+ industries. Complete infrastructure from sales funnels to follow-up automation.</p>
+      <span class="work-card-tag">Business Systems</span>
+    </div>
+
+    <div class="work-card">
+      <div class="work-card-icon">📐</div>
+      <h3 class="work-card-title">90-Day Brand Positioning Intensive (BPI)</h3>
+      <p class="work-card-desc">A structured reconstruction program to realign founder vision, mission, and operational identity. Built on PM principles post-Google certification (Jan 2026).</p>
+      <span class="work-card-tag">Strategy</span>
+    </div>
+
+    <div class="work-card">
+      <div class="work-card-icon">📱</div>
+      <h3 class="work-card-title">Mobile-First CRM on Notion</h3>
+      <p class="work-card-desc">14 architectural frameworks and a lightweight, mobile-optimised CRM system built for SME founders who need structure without expensive software.</p>
+      <span class="work-card-tag">Product</span>
+    </div>
+
+    <div class="work-card">
+      <div class="work-card-icon">🏠</div>
+      <h3 class="work-card-title">Nigeria's Realtor Marketing Guide</h3>
+      <p class="work-card-desc">Practical digital marketing playbook for Nigerian real estate agents and developers. Currently selling on Mainstack with targeted cold outreach distribution.</p>
+      <span class="work-card-tag">Digital Product · Mainstack</span>
+    </div>
+
+    <div class="work-card">
+      <div class="work-card-icon">📦</div>
+      <h3 class="work-card-title">10+ Digital Solutions — Live</h3>
+      <p class="work-card-desc">Suite of practical SME and real estate tools hosted across Selar, Mainstack, and Gumroad. Distributed via cold email and DM outreach campaigns.</p>
+      <span class="work-card-tag">Selar · Mainstack · Gumroad</span>
+    </div>
+
+    <div class="work-card">
+      <div class="work-card-icon">🌐</div>
+      <h3 class="work-card-title">deploymims.com</h3>
+      <p class="work-card-desc">Business systems consultancy applying policy-design thinking to real-world operational challenges. Full client lifecycle management handled independently.</p>
+      <span class="work-card-tag">Consultancy</span>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════ EXPERIENCE ═══════════════ -->
+<section id="experience" aria-labelledby="exp-title">
+  <p class="section-label">Where I've Been</p>
+  <h2 class="section-title" id="exp-title">Experience <span>Highlights</span></h2>
+
+  <div class="exp-timeline reveal">
+
+    <div class="exp-item featured">
+      <div class="exp-meta">
+        <div>
+          <div class="exp-role">Founder & Business Systems Strategist</div>
+          <div class="exp-org">Deploy MIMS / SWR Consult</div>
+        </div>
+        <span class="exp-dates">Jan 2026 – Present</span>
+      </div>
+      <ul class="exp-desc">
+        <li>Designed and deployed the MIMS LVD system — a WhatsApp-first acquisition framework across 4+ industries</li>
+        <li>Built 14+ business architecture frameworks and mobile-first CRM solutions on Notion</li>
+        <li>Launched 10+ digital products on Selar, Mainstack &amp; Gumroad via targeted cold outreach</li>
+        <li>Closed retainer clients within first month; managed all brand communications independently</li>
+      </ul>
+    </div>
+
+    <div class="exp-item">
+      <div class="exp-meta">
+        <div>
+          <div class="exp-role">Systems Administrator</div>
+          <div class="exp-org">Vouchernet</div>
+        </div>
+        <span class="exp-dates">Role Duration on File</span>
+      </div>
+      <ul class="exp-desc">
+        <li>Administered core systems infrastructure ensuring operational continuity and access control</li>
+        <li>Identified and resolved workflow inefficiencies with measurable team productivity impact</li>
+        <li>Maintained comprehensive process documentation supporting organisational decision-making</li>
+      </ul>
+    </div>
+
+    <div class="exp-item">
+      <div class="exp-meta">
+        <div>
+          <div class="exp-role">Operations, Marketing & Customer Experience Lead</div>
+          <div class="exp-org">Family Dental Care · Abuja, Nigeria</div>
+        </div>
+        <span class="exp-dates">May 2022 – Sep 2024</span>
+      </div>
+      <ul class="exp-desc">
+        <li>Functioned in a de facto management capacity across marketing, CX, systems admin, and team leadership</li>
+        <li>Designed SOPs that reduced internal communication gaps and improved workflow consistency</li>
+        <li>Led customer experience initiatives improving patient satisfaction, responsiveness, and retention</li>
+      </ul>
+    </div>
+
+    <div class="exp-item">
+      <div class="exp-meta">
+        <div>
+          <div class="exp-role">Executive Assistant to CEO/MD & Digital Marketing</div>
+          <div class="exp-org">Mottainai Africa</div>
+        </div>
+        <span class="exp-dates">Duration on File</span>
+      </div>
+      <ul class="exp-desc">
+        <li>Provided strategic support to the CEO/MD including calendar, correspondence, and priority management</li>
+        <li>Supported digital marketing and brand positioning; served as key external stakeholder liaison</li>
+      </ul>
+    </div>
+
+    <div class="exp-item">
+      <div class="exp-meta">
+        <div>
+          <div class="exp-role">Marketing Associate & Stakeholder Communications</div>
+          <div class="exp-org">Granite Outlet · USA (Remote)</div>
+        </div>
+        <span class="exp-dates">Nov 2022 – Oct 2025</span>
+      </div>
+      <ul class="exp-desc">
+        <li>3 years of consistent marketing and stakeholder comms across a distributed US–Nigeria team</li>
+        <li>Prepared executive-facing reports, summaries, and client engagement documentation</li>
+      </ul>
+    </div>
+
+    <div class="exp-item">
+      <div class="exp-meta">
+        <div>
+          <div class="exp-role">Digital Marketing & Communications Executive</div>
+          <div class="exp-org">ImpactHER Foundation · Lagos</div>
+        </div>
+        <span class="exp-dates">Apr – Nov 2019</span>
+      </div>
+      <ul class="exp-desc">
+        <li>Led digital outreach and communications for women-focused advocacy campaigns</li>
+        <li>Contributed to program development, implementation, and stakeholder documentation</li>
+      </ul>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════ ABOUT ═══════════════ -->
+<section id="about" aria-labelledby="about-title">
+  <p class="section-label">Who I Am</p>
+  <h2 class="section-title" id="about-title">Core Capabilities <span>&amp; About Me</span></h2>
+
+  <div class="about-grid reveal">
+    <div class="bio-block">
+      <p>
+        I'm a <strong>systems thinker and operations specialist</strong> based in Abuja, Nigeria — with a track record of building infrastructure that holds under pressure across private enterprise, development, and health-adjacent sectors.
+      </p>
+      <p>
+        My edge is rare: I understand both the <strong>strategic architecture of organisations</strong> and the tactical execution that makes them work day-to-day. As a founder, I've built and shipped complete business systems from scratch. As a support professional, I've operated at the executive level while staying close to the ground.
+      </p>
+      <p>
+        I'm currently completing a <strong>BSc in Public Policy & Administration</strong> at Miva Open University (CGPA 4.52, graduating 2027) with long-term ambition in Human Rights Law — particularly in tech, labour, and access for African communities.
+      </p>
+      <div class="stat-row">
+        <div class="stat"><span class="stat-num">6+</span><span class="stat-label">Years Experience</span></div>
+        <div class="stat"><span class="stat-num">10+</span><span class="stat-label">Live Products</span></div>
+        <div class="stat"><span class="stat-num">5</span><span class="stat-label">Sectors Spanned</span></div>
+      </div>
+    </div>
+
+    <div class="skills-block">
+      <div class="skill-group">
+        <p class="skill-group-title">Core Skills</p>
+        <div class="skill-tags">
+          <span class="skill-tag">Business Systems Architecture</span>
+          <span class="skill-tag">Stakeholder Communications</span>
+          <span class="skill-tag">Sales Operations</span>
+          <span class="skill-tag">Program Coordination</span>
+          <span class="skill-tag">Research & Documentation</span>
+          <span class="skill-tag">Digital Marketing</span>
+          <span class="skill-tag">Process Design & SOPs</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <p class="skill-group-title">Tools & Platforms</p>
+        <div class="skill-tags">
+          <span class="skill-tag">Notion CRM</span>
+          <span class="skill-tag">WhatsApp Business</span>
+          <span class="skill-tag">Mainstack</span>
+          <span class="skill-tag">Selar · Gumroad</span>
+          <span class="skill-tag">Google Workspace</span>
+          <span class="skill-tag">GitHub Pages</span>
+          <span class="skill-tag">Hostinger</span>
+          <span class="skill-tag">Trello</span>
+          <span class="skill-tag">Slack</span>
+          <span class="skill-tag">Figma</span>
+          <span class="skill-tag">Canva</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <p class="skill-group-title">Certifications</p>
+        <div class="skill-tags">
+          <span class="skill-tag">Google — Project Management</span>
+          <span class="skill-tag">IE Business School — IMC</span>
+          <span class="skill-tag">PMP (In Progress)</span>
+          <span class="skill-tag">Goethe — A1 German</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <p class="skill-group-title">Policy Focus Areas</p>
+        <div class="skill-tags">
+          <span class="skill-tag">Digital Governance</span>
+          <span class="skill-tag">Education Technology</span>
+          <span class="skill-tag">Health Systems</span>
+          <span class="skill-tag">Gender & Inclusion Policy</span>
+          <span class="skill-tag">Private Sector Dev (Africa)</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ VALUES & IMPACT ═══════════════ -->
+<section id="values" aria-labelledby="values-title">
+  <p class="section-label">What I Stand For</p>
+  <h2 class="section-title" id="values-title">Values I Create & <span>Long-Term Impact</span></h2>
+
+  <div class="two-col reveal">
+    <div>
+      <p class="skill-group-title" style="margin-bottom:20px;color:var(--mid)">7 Core Values I Create</p>
+      <div class="value-list">
+        <div class="value-item">
+          <span class="value-num">01</span>
+          <div class="value-text"><strong>Clarity</strong><span>Turning complex systems into simple, actionable structures people can actually use</span></div>
+        </div>
+        <div class="value-item">
+          <span class="value-num">02</span>
+          <div class="value-text"><strong>Impact-First Thinking</strong><span>Every output is tied to a measurable outcome — never activity for its own sake</span></div>
+        </div>
+        <div class="value-item">
+          <span class="value-num">03</span>
+          <div class="value-text"><strong>Equity</strong><span>Centering inclusion in every framework, communication, and program I design</span></div>
+        </div>
+        <div class="value-item">
+          <span class="value-num">04</span>
+          <div class="value-text"><strong>Reliability</strong><span>Consistent delivery across distributed, high-pressure, cross-cultural environments</span></div>
+        </div>
+        <div class="value-item">
+          <span class="value-num">05</span>
+          <div class="value-text"><strong>Ownership</strong><span>Founder-level accountability even when I'm in a support or coordination role</span></div>
+        </div>
+        <div class="value-item">
+          <span class="value-num">06</span>
+          <div class="value-text"><strong>Adaptability</strong><span>Proven across health, tech, policy, and private sectors without losing effectiveness</span></div>
+        </div>
+        <div class="value-item">
+          <span class="value-num">07</span>
+          <div class="value-text"><strong>Systems Integrity</strong><span>Building things that work without me in the room — and teaching others to maintain them</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <p class="skill-group-title" style="margin-bottom:20px;color:var(--mid)">7 Long-Term Impact Goals</p>
+      <div class="impact-list">
+        <div class="impact-item">
+          <span class="value-num">01</span>
+          <div class="impact-text"><strong>Shape governance & digital policy in Africa</strong><span>Contributing to frameworks that make institutions work for citizens</span></div>
+        </div>
+        <div class="impact-item">
+          <span class="value-num">02</span>
+          <div class="impact-text"><strong>Build scalable infrastructure for African institutions</strong><span>Replicable operational systems for organisations that matter</span></div>
+        </div>
+        <div class="impact-item">
+          <span class="value-num">03</span>
+          <div class="impact-text"><strong>Advance gender-inclusive program design</strong><span>In education, health, and economic access across the continent</span></div>
+        </div>
+        <div class="impact-item">
+          <span class="value-num">04</span>
+          <div class="impact-text"><strong>Practice Human Rights Law</strong><span>Specialising in tech, labour rights, and access for underserved communities</span></div>
+        </div>
+        <div class="impact-item">
+          <span class="value-num">05</span>
+          <div class="impact-text"><strong>Create replicable SME toolkits</strong><span>Practical business systems resources for underserved founders across Africa</span></div>
+        </div>
+        <div class="impact-item">
+          <span class="value-num">06</span>
+          <div class="impact-text"><strong>Bridge policy and private sector execution</strong><span>Translating governance frameworks into viable market strategies</span></div>
+        </div>
+        <div class="impact-item">
+          <span class="value-num">07</span>
+          <div class="impact-text"><strong>Mentor African women in systems & governance</strong><span>Building the next generation of operational leaders on the continent</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ CONTACT ═══════════════ -->
+<section id="contact" aria-labelledby="contact-title">
+  <p class="section-label">Get In Touch</p>
+  <h2 class="section-title" id="contact-title">Open to New <span>Projects</span></h2>
+
+  <div class="contact-grid reveal">
+    <div class="contact-card">
+      <div class="contact-item">
+        <span class="contact-icon">📧</span>
+        <div class="contact-detail">
+          <span class="contact-label">Email</span>
+          <span class="contact-value"><a href="mailto:vs20julia@gmail.com">vs20julia@gmail.com</a></span>
+        </div>
+      </div>
+      <div class="contact-item">
+        <span class="contact-icon">📱</span>
+        <div class="contact-detail">
+          <span class="contact-label">Phone / WhatsApp</span>
+          <span class="contact-value"><a href="tel:+2347081447507">+234 708 144 7507</a></span>
+        </div>
+      </div>
+      <div class="contact-item">
+        <span class="contact-icon">💼</span>
+        <div class="contact-detail">
+          <span class="contact-label">LinkedIn</span>
+          <span class="contact-value"><a href="https://www.linkedin.com/in/systemswjulia" target="_blank" rel="noopener">linkedin.com/in/systemswjulia</a></span>
+        </div>
+      </div>
+      <div class="contact-item">
+        <span class="contact-icon">📍</span>
+        <div class="contact-detail">
+          <span class="contact-label">Location</span>
+          <span class="contact-value">P9 Sunnyvale Estate, Abuja, Nigeria</span>
+        </div>
+      </div>
+      <div class="contact-item">
+        <span class="contact-icon">🌐</span>
+        <div class="contact-detail">
+          <span class="contact-label">Consultancy</span>
+          <span class="contact-value"><a href="https://deploymims.com" target="_blank" rel="noopener">deploymims.com</a></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="cv-cta">
+      <div>
+        <p class="section-label" style="color:var(--gold2)">Full CV</p>
+        <h3 class="section-title" style="color:var(--white);font-size:1.5rem;margin-bottom:0">View My CV</h3>
+      </div>
+      <p>
+        My full merged CV covers all experience across operations, stakeholder communications, sales, research, and program management — plus my entrepreneurial work and academic progress.
+      </p>
+      <a href="https://drive.google.com/file/d/1SsTf8tRRB2OWALxafrkqNrMDDayMq1CG/view" class="btn btn-primary" target="_blank" rel="noopener">
+        📄 View My CV
+      </a>
+      <a href="https://www.linkedin.com/in/systemswjulia" class="btn btn-outline" target="_blank" rel="noopener">
+        View LinkedIn Profile
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2026 Juliana James · Abuja, Nigeria</p>
+  <a href="https://deploymims.com" target="_blank" rel="noopener">deploymims.com</a>
+</footer>
+
+<script>
+// Mobile nav
+const hamburger = document.getElementById('hamburger');
+const drawer = document.getElementById('drawer');
+hamburger.addEventListener('click', () => {
+  drawer.classList.toggle('open');
+  hamburger.setAttribute('aria-expanded', drawer.classList.contains('open'));
+});
+document.querySelectorAll('.drawer-link').forEach(l =>
+  l.addEventListener('click', () => drawer.classList.remove('open'))
+);
+
+// Scroll reveal
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
